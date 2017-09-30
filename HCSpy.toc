@@ -1,0 +1,10 @@
+## Interface: 11200
+## Title: HCSpy
+## Notes: Find out who is using Luna unit Frames or HealComm!
+## Author: Earnil, Zyu, Androgan
+## Version: 0.1
+## OptionalDeps: Ace2
+
+## X-Category: TextSpy
+
+HCSpy.lua
