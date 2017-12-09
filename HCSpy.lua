@@ -1,6 +1,6 @@
 HCSpy = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0")
 
-
+-- /hcspy chat commands
 local HCSpyOptions = { 
   type='group',
   args = {
@@ -19,12 +19,19 @@ local HCSpyOptions = {
       func = function ()
         HCSpy:Reset()
       end
+    },
+    qhv = {
+      type = "execute",
+      name = "qhv",
+      desc = "QuickHealVersion",
+      func = function ()
+        HCSpy:QuickHealVersion()
+      end
     }
   }
 }
 
- 
-
+--Register for ChatCommand Event
 HCSpy:RegisterChatCommand({"/hcspy", "/HCSpy"}, HCSpyOptions)
 
 function HCSpy:OnInitialize()
@@ -40,31 +47,34 @@ function HCSpy:OnDisable()
     -- Called when the addon is disabled
 end
 
-list = {} -- list of people using HCSpy
-listmembers = 1
+-- HCSpy variables
+local list = {} -- list of people using HCSpy
+local listmembers = 1
 
 
 
 function HCSpy:CHAT_MSG_ADDON()
-  if arg1 == "HealComm" and string.find(arg2, "Healdelay") == nil then --and arg4 ~= UnitName("player") then
-    --self:Print("HealComm: "..arg1.." "..arg2.." "..arg3.." "..arg4)
- 
-    --self:Print("HealComm user: "..arg4)
-    for i=1, listmembers do
-      if list[i] == arg4 then
-        --self:Print(arg4.." is already in the list")
+    --Add to HealComm users list
+    if arg1 == "HealComm" and string.find(arg2, "Healdelay") == nil then --and arg4 ~= UnitName("player") then
+        for i=1, listmembers do
+            if list[i] == arg4 then
         return
-      end
+        end
     end
     list[listmembers] = arg4
     listmembers = listmembers + 1
     self:Print(arg4.." is using HealComm or Luna unit Frames and is now entry "..listmembers - 1 .." in the list")
     self:Print("added for: "..arg1.." "..arg2.." "..arg3.." "..arg4)
     end
+    
+    --Versioncheck for QuickHeal
+    if arg1 == "QuickHeal" and arg2 ~= "versioncheck" then
+        DEFAULT_CHAT_FRAME:AddMessage("QH Version: "..arg2.." - "..arg4, 0.95, 0.29, 0.43)
+    end
 end
 
 
-
+-- HealCommSpy functions
 function HCSpy:Reset()
   list = {}
   listmembers = 1
@@ -84,9 +94,35 @@ function HCSpy:List()
 end
 
 
+--calls for versioncheck for the QuickHeal addon
+function HCSpy:QuickHealVersion()
+	self:Print("Checking Version of QuickHeal...")
+    SendAddonMessage("QuickHeal", "versioncheck", RAID)
+end
 
 
 
+
+
+-- Misc
+local function strsplit(pString, pPattern)
+	local Table = {}
+	local fpat = "(.-)" .. pPattern
+	local last_end = 1
+	local s, e, cap = strfind(pString, fpat, 1)
+	while s do
+		if s ~= 1 or cap ~= "" then
+			table.insert(Table,cap)
+		end
+		last_end = e+1
+		s, e, cap = strfind(pString, fpat, last_end)
+	end
+	if last_end <= strlen(pString) then
+		cap = strfind(pString, last_end)
+		table.insert(Table, cap)
+	end
+	return Table
+end
 
 
 
