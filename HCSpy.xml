@@ -20,7 +20,7 @@
 
 <!-- HCSpy UI Window -->
   <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
-    <Size><AbsDimension x="200" y="100"/></Size>
+    <Size><AbsDimension x="100" y="10"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
       <OnLoad>
@@ -40,7 +40,7 @@
     </Backdrop>
     <Frames>
       <!-- Test Button -->
-      <Button name="HCSpy_TestTestButton" inherits="UIPanelButtonTemplate" text="Test" hidden="false">
+      <Button name="HCSpy_TestTestButton" inherits="UIPanelButtonTemplate" text="Test" hidden="true">
         <Size><AbsDimension x="90" y="25"/></Size>
         <Anchors>
           <Anchor point="CENTER" relativePoint="CENTER">

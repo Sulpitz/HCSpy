@@ -1,24 +1,7 @@
-local guildRoster = {}
-local GuildRosterFontStringButton = {}
-local GuildRosterFontStringPlayername = {}
-local GuildRosterFontStringPlayerlevel = {}
-local GuildRosterFontStringPlayerrank = {}
-local GuildRosterFontStringPlayerzone = {}
-local GuildRosterFontStringPlayernote = {}
-local GuildRosterFontStringPlayerofficernote = {}
-local GuildRosterFontStringPlayeronline = {}
-local GuildRosterFontStringPlayerstatus = {}
-local GuildRosterFontStringPlayerclassFileName = {}
-local MaxFrames = 0
-
-
+local HCSpyPlayerListFontstring = {}
 
 local list = {} -- list of people using HCSpy
 local listmembers = 1
-
-
-
-
 
 
 SLASH_HCSPY1 = '/hcspy'
@@ -29,7 +12,7 @@ function SlashCmdList.HCSPY(msg, editbox)
   elseif msg == "list" then
     HCSpy_List()
   else
-    pPrint("Unknown HCSpy Command")
+    HCSpy_ToggleUiWindow()
   end
 end
 
@@ -57,61 +40,22 @@ function GuildInspector_BuildGuildRoster()
     end
 end
 
-function GuildInspector_UpdateGuildRoster()
-    GuildInspector_BuildGuildRoster()
-    for index, v in pairs(guildRoster) do
+function HCSpy_UpdateGui()
+    for index, playerName in pairs(list) do
             -- create frame if nessesarry
-        if GuildRosterFontStringButton[index] == nil then
-            GuildRosterFontStringButton[index] = CreateFrame('Button', nil, GuildInspectorUiWindow)
-            GuildRosterFontStringButton[index]:SetPoint('TOPLEFT', GuildInspectorUiWindow, 'TOPLEFT', 3, (12 - 15 * index)            )
-            GuildRosterFontStringButton[index]:SetWidth(GuildInspectorUiWindow:GetWidth()- 20)
-            GuildRosterFontStringButton[index]:SetHeight(15)
-            --GuildRosterFontStringButton[index]:SetBackdrop({bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background'})
-            GuildRosterFontStringButton[index]:SetScript('OnClick', GuildInspector_OnClickGuildMemdber)
-            --GuildRosterFontStringButton[index]:SetFont("Fonts\\FRIZQT__.TTF", 11, "OUTLINE, MONOCHROME")
-            GuildRosterFontStringButton[index]:SetText("myestttext")
-            GuildRosterFontStringButton[index]:SetID(index)
+        if HCSpyPlayerListFontstring[index] == nil then
 
-            --Level
-            GuildRosterFontStringPlayerlevel[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayerlevel[index]:SetText(v.level)
-            GuildRosterFontStringPlayerlevel[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 5, -2)
-            --name
-            GuildRosterFontStringPlayername[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayername[index]:SetText(v.name)
-            GuildRosterFontStringPlayername[index]:SetTextColor(GuildInspector_GetClassClolor(v.classFileName))
-            GuildRosterFontStringPlayername[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 30, -2)
-            --zone
-            GuildRosterFontStringPlayerzone[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayerzone[index]:SetText(v.zone)
-            GuildRosterFontStringPlayerzone[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 120, -2)
-            --note
-            GuildRosterFontStringPlayernote[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayernote[index]:SetText(v.note)
-            GuildRosterFontStringPlayernote[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 250, -2)
-            --officernote
-            GuildRosterFontStringPlayerofficernote[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayerofficernote[index]:SetText(v.officernote)
-            GuildRosterFontStringPlayerofficernote[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 460, -2) --längemax 220 
-            --rank
-            GuildRosterFontStringPlayerrank[index] = GuildInspectorUiWindow:CreateFontString(nil, nil, "GuildInspectorUiWindowListNameFontstring")
-            GuildRosterFontStringPlayerrank[index]:SetText(v.rank)
-            GuildRosterFontStringPlayerrank[index]:SetPoint('TOPLEFT', GuildRosterFontStringButton[index], 'TOPLEFT', 680, -2)
+          HCSpyPlayerListFontstring[index] = HCSpyUiWindow:CreateFontString(nil, nil, "HCSpyUiWindowListNameFontstring")
+          HCSpyPlayerListFontstring[index]:SetText(playerName)
+          HCSpyPlayerListFontstring[index]:SetPoint('TOPLEFT', "HCSpyUiWindow", 'TOPLEFT', 5, (6 - 10 * index))
+          HCSpyUiWindow:SetHeight(8 + 10 * index)
+
         else
-            GuildRosterFontStringPlayerlevel[index]:SetText(v.level)
-            GuildRosterFontStringPlayername[index]:SetText(v.name)
-            GuildRosterFontStringPlayername[index]:SetTextColor(GuildInspector_GetClassClolor(v.classFileName))
-            GuildRosterFontStringPlayerzone[index]:SetText(v.zone)
-            GuildRosterFontStringPlayernote[index]:SetText(v.note)
-            GuildRosterFontStringPlayerofficernote[index]:SetText(v.officernote)
-            GuildRosterFontStringPlayerrank[index]:SetText(v.rank)      
+          HCSpyPlayerListFontstring[index]:SetText(playerName)
         end
     end
 end
 
-function GuildInspector_OnClickGuildMemdber()
-    pPrint("clicked on Guild memeber")
-end
 
 function HCSpy_OnLoad()
   HCSpy:RegisterEvent('CHAT_MSG_ADDON')
@@ -120,15 +64,14 @@ end
 function HCSpy_OnEvent(self, event, ...)
   arg1, arg2, arg3, arg4, arg5 = ...
   arg4 = string.match(arg4, "[^-]+")
-  pPrint("arg1: " .. arg1 .. " | arg4 " .. arg4)
     if event == "CHAT_MSG_ADDON" then
       if arg1 == "LCHC10" then
-        pPrint("heal vrom " .. arg4)
         for i=1, listmembers do
           if list[i] == arg4 then return end
         end     
         list[listmembers] = arg4
         listmembers = listmembers + 1
+        HCSpy_UpdateGui()
       end 
     end
 end
@@ -147,23 +90,24 @@ function HCSpy_Reset()
 end
 
 function HCSpy_TestButton()
-    pPrint("HCSpy Test button")
+  HCSpy_UpdateGui()
+  pPrint("HCSpy Test button")
 end
 
 function pPrint(msg)
     DEFAULT_CHAT_FRAME:AddMessage(msg)
 end
 
-function GuildInspector_ToggleUiWindow()
-    if GuildInspectorUiWindow:IsVisible() then
-        GuildInspectorUiWindow:Hide()
+function HCSpy_ToggleUiWindow()
+    if HCSpyUiWindow:IsVisible() then
+        HCSpyUiWindow:Hide()
     else
-        GuildInspectorUiWindow:Show()
-        GuildInspector_UpdateGuildRoster()
+        HCSpyUiWindow:Show()
+        HCSpy_UpdateGui()
     end
 end
 
-function GuildInspector_GetClassClolor(class)
+function HCSpy_GetClassClolor(class)
     if class == "WARLOCK"  then
       return 0.58, 0.51, 0.79,1
     elseif class == "DRUID"  then
