@@ -1,0 +1,64 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+
+<Script file="HCSpy.lua"/>
+
+<FontString name="HCSpyUiWindowListNameFontstring" frameStrata="DIALOG" inherits="GameFontNormalSmall" text="Player Name" justifyH="LEFT" justifyV="MIDDLE" virtual="true">
+         <Color r="1" g="1" b="1" a="1"/>
+         <FontHeight val="10"/>
+         <Anchors>
+         <Anchor point="TOPLEFT" relativeTo="$parent" x="5" y="-5" />
+         </Anchors>
+</FontString>
+
+<!-- HCSpy Main Frame -->
+  <Frame name="HCSpy" hidden="true">
+    <Scripts>
+      <OnLoad function="HCSpy_OnLoad"/>
+      <OnEvent function="HCSpy_OnEvent"/>
+    </Scripts>
+  </Frame>
+
+<!-- HCSpy UI Window -->
+  <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
+    <Size><AbsDimension x="200" y="100"/></Size>
+    <Anchors> <Anchor point="CENTER" /></Anchors>
+    <Scripts>
+      <OnLoad>
+        self:RegisterForDrag("LeftButton");
+      </OnLoad>
+      <OnDragStart>
+        self:StartMoving();
+      </OnDragStart>
+      <OnDragStop>
+        self:StopMovingOrSizing();
+      </OnDragStop>
+    </Scripts>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      <TileSize><AbsValue val="32"/></TileSize>
+      <EdgeSize><AbsValue val="8"/></EdgeSize>
+      <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+    </Backdrop>
+    <Frames>
+      <!-- Test Button -->
+      <Button name="HCSpy_TestTestButton" inherits="UIPanelButtonTemplate" text="Test" hidden="false">
+        <Size><AbsDimension x="90" y="25"/></Size>
+        <Anchors>
+          <Anchor point="CENTER" relativePoint="CENTER">
+            <Offset>
+              <AbsDimension x="280" y="-186"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+          </OnLoad>
+          <OnClick>
+            HCSpy_TestButton()
+          </OnClick>
+        </Scripts>
+      </Button>
+    </Frames>
+  </Frame>
+</Ui>
+
+
