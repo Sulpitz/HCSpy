@@ -19,7 +19,7 @@
   </Frame>
 
 <!-- HCSpy UI Window -->
-  <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
+  <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="true" movable="true" enableMouse="true">
     <Size><AbsDimension x="100" y="10"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>

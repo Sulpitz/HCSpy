@@ -17,29 +17,6 @@ function SlashCmdList.HCSPY(msg, editbox)
 end
 
 
-
-function GuildInspector_BuildGuildRoster()
-    guildRoster = {}
-    numGuildMembers = GetNumGuildMembers()
-    index = 1
-    for i = 1, numGuildMembers do
-        name, rank, _, level, _, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
-        if online or showOffline  then
-            guildRoster[index] = {}
-            guildRoster[index]["name"] = string.match(name, "[^-]+") --%w+
-            guildRoster[index]["rank"] = rank
-            guildRoster[index]["level"] = level
-            guildRoster[index]["zone"] = zone
-            guildRoster[index]["note"] = note
-            guildRoster[index]["officernote"] = officernote
-            guildRoster[index]["online"] = online
-            guildRoster[index]["status"] = status
-            guildRoster[index]["classFileName"] = classFileName
-            index = index + 1
-        end
-    end
-end
-
 function HCSpy_UpdateGui()
     for index, playerName in pairs(list) do
             -- create frame if nessesarry
