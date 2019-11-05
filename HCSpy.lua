@@ -2,6 +2,7 @@ local HCSpyPlayerListFontstring = {}
 
 local list = {} -- list of people using HCSpy
 local listmembers = 1
+local versionTable = {}
 
 
 SLASH_HCSPY1 = '/hcspy'
@@ -26,9 +27,19 @@ function HCSpy_UpdateGui()
           HCSpyPlayerListFontstring[index]:SetText(playerName)
           HCSpyPlayerListFontstring[index]:SetPoint('TOPLEFT', "HCSpyUiWindow", 'TOPLEFT', 5, (6 - 10 * index))
           HCSpyUiWindow:SetHeight(8 + 10 * index)
+          if versionTable[playerName] == "LCHC10" then
+            HCSpyPlayerListFontstring[index]:SetTextColor(1, 0, 0, 1)
+          else
+            HCSpyPlayerListFontstring[index]:SetTextColor(1, 1, 1, 1)
+          end
 
         else
-          HCSpyPlayerListFontstring[index]:SetText(playerName)
+          HCSpyPlayerListFontstring[index]:SetText(playerName)          
+          if versionTable[playerName] == "LCHC10" then
+            HCSpyPlayerListFontstring[index]:SetTextColor(1, 0, 0, 1)
+          else
+            HCSpyPlayerListFontstring[index]:SetTextColor(1, 1, 1, 1)
+          end
         end
     end
 end
@@ -46,7 +57,17 @@ function HCSpy_OnEvent(self, event, ...)
         for i=1, listmembers do
           if list[i] == arg4 then return end
         end     
+        list[listmembers] = arg4        
+        versionTable[arg4] = "LCHC10"
+        listmembers = listmembers + 1
+        HCSpy_UpdateGui()
+
+      elseif arg1 == "LHC40" then
+        for i=1, listmembers do
+          if list[i] == arg4 then return end
+        end     
         list[listmembers] = arg4
+        versionTable[arg4] = "LHC40"
         listmembers = listmembers + 1
         HCSpy_UpdateGui()
       end 
@@ -62,7 +83,11 @@ end
 
 function HCSpy_Reset()
   list = {}
-  listmembers = 1
+  versionTable = {}
+  listmembers = 1  
+  for index = 1, #HCSpyPlayerListFontstring do
+    HCSpyPlayerListFontstring[index]:SetText("")
+  end
   pPrint("HCSpy list has been reset.")
 end
 
