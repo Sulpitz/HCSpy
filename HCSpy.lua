@@ -47,6 +47,8 @@ end
 
 function HCSpy_OnLoad()
   HCSpy:RegisterEvent('CHAT_MSG_ADDON')
+  C_ChatInfo.RegisterAddonMessagePrefix("LCHC10")
+  C_ChatInfo.RegisterAddonMessagePrefix("LHC40")
 end
 
 function HCSpy_OnEvent(self, event, ...)
