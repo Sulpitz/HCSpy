@@ -53,6 +53,8 @@ function HCSpy_OnEvent(self, event, ...)
   arg1, arg2, arg3, arg4, arg5 = ...
   arg4 = string.match(arg4, "[^-]+")
     if event == "CHAT_MSG_ADDON" then
+      if arg1 =="RMH" then return end
+      print(event, arg1, arg4, "(" .. arg2 .. ")")
       if arg1 == "LCHC10" then
         for i=1, listmembers do
           if list[i] == arg4 then return end
