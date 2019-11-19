@@ -11,7 +11,10 @@ function SlashCmdList.HCSPY(msg, editbox)
     pPrint("HCSpy is now reset!")
     HCSpy_Reset()
   elseif msg == "list" then
-    HCSpy_List()
+    HCSpy_List()    
+  elseif msg == "prefix" then
+    prefix = not prefix
+    print("Prefix:", prefix)
   else
     HCSpy_ToggleUiWindow()
   end
@@ -54,7 +57,7 @@ end
 function HCSpy_OnEvent(self, event, ...)
   arg1, arg2, arg3, arg4, arg5 = ...
   arg4 = string.match(arg4, "[^-]+")
-    if event == "CHAT_MSG_ADDON" then
+    if event == "CHAT_MSG_ADDON" then      
       if arg1 == "LCHC10" then
         for i=1, listmembers do
           if list[i] == arg4 then return end
