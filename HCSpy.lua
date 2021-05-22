@@ -3,6 +3,17 @@ local HCSpyPlayerListFontstring = {}
 local list = {} -- list of people using HCSpy
 local listmembers = 1
 local versionTable = {}
+local cChannelid
+local prefix = false
+
+HCSpy_BACKDROP = {
+	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",	
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+}
+
+HCSpy_BLACK = CreateColor(0, 0, 0)
 
 
 SLASH_HCSPY1 = '/hcspy'
@@ -58,6 +69,9 @@ function HCSpy_OnEvent(self, event, ...)
   arg1, arg2, arg3, arg4, arg5 = ...
   arg4 = string.match(arg4, "[^-]+")
     if event == "CHAT_MSG_ADDON" then      
+      if prefix then
+        print("Prefix", arg1, arg4)
+      end
       if arg1 == "LCHC10" then
         for i=1, listmembers do
           if list[i] == arg4 then return end
@@ -66,6 +80,7 @@ function HCSpy_OnEvent(self, event, ...)
         versionTable[arg4] = "LCHC10"
         listmembers = listmembers + 1
         HCSpy_UpdateGui()
+        print("WARNING LCHC10 used by:", arg4)
 
       elseif arg1 == "LHC40" then
         for i=1, listmembers do
@@ -101,9 +116,22 @@ function HCSpy_TestButton()
   pPrint("HCSpy Test button")
 end
 
+
+function cprint(msg)
+  ChatFrame6:AddMessage(msg)
+end
+
 function pPrint(msg)
     DEFAULT_CHAT_FRAME:AddMessage(msg)
 end
+
+-- function ifprint(msg, name)
+--   if buffnG then
+--     cprint(name, "is true")
+--   else
+--     cprint(name, "is false")
+--   end
+-- end
 
 function HCSpy_ToggleUiWindow()
     if HCSpyUiWindow:IsVisible() then

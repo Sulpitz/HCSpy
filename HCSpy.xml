@@ -19,11 +19,15 @@
   </Frame>
 
 <!-- HCSpy UI Window -->
-  <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="true" movable="true" enableMouse="true">
+  <Frame name="HCSpyUiWindow" frameStrata="DIALOG" parent="UIParent" hidden="true" movable="true" enableMouse="true" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="HCSpy_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="HCSpy_BLACK" type="global" />
+		</KeyValues>
     <Size><AbsDimension x="100" y="10"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
-      <OnLoad>
+      <OnLoad inherit="prepend">
         self:RegisterForDrag("LeftButton");
       </OnLoad>
       <OnDragStart>
@@ -33,11 +37,6 @@
         self:StopMovingOrSizing();
       </OnDragStop>
     </Scripts>
-    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-      <TileSize><AbsValue val="32"/></TileSize>
-      <EdgeSize><AbsValue val="8"/></EdgeSize>
-      <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
-    </Backdrop>
     <Frames>
       <!-- Test Button -->
       <Button name="HCSpy_TestTestButton" inherits="UIPanelButtonTemplate" text="Test" hidden="true">
